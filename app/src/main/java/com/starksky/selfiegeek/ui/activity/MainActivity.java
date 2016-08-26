@@ -1,9 +1,8 @@
-package com.starksky.selfiegeek;
+package com.starksky.selfiegeek.ui.activity;
 
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +15,7 @@ import android.view.MenuItem;
 
 import com.kinvey.android.Client;
 import com.kinvey.android.callback.KinveyPingCallback;
+import com.starksky.selfiegeek.R;
 import com.starksky.selfiegeek.ui.fragment.CameraFragment;
 
 public class MainActivity extends AppCompatActivity {
