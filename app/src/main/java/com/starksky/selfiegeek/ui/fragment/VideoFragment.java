@@ -20,8 +20,6 @@ import android.widget.Button;
 import com.starksky.selfiegeek.R;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -36,6 +34,7 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback, V
     boolean recording = false;
     Button captureButton;
     Button modeSelect;
+    public static int orientation;
 
 
     public VideoFragment() {
@@ -55,7 +54,12 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback, V
         surfaceHolder = surfaceView.getHolder();
         surfaceHolder.addCallback(this);
         surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-
+        camera = android.hardware.Camera.open();
+        Camera.Parameters param;
+        camera.setDisplayOrientation(90);
+        param = camera.getParameters();
+        param.setPreviewSize(352, 288);
+        camera.setParameters(param);
 
         recorder = new MediaRecorder();
 
@@ -72,12 +76,8 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback, V
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         prepareRecorder();
-        camera = android.hardware.Camera.open();
-        Camera.Parameters param;
-        camera.setDisplayOrientation(90);
-        param = camera.getParameters();
-        param.setPreviewSize(352, 288);
-        camera.setParameters(param);
+
+
 
         try {
             camera.setPreviewDisplay(surfaceHolder);
@@ -115,7 +115,7 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback, V
             File sgdir = new File("/sdcard/selfiegeek/");
             sgdir.mkdirs();
         }
-        recorder.setOrientationHint(90);
+
         try {
             String fileName = String.format("/sdcard/selfiegeek/%d.mp4", System.currentTimeMillis());
             recorder.setOutputFile(fileName);
@@ -125,6 +125,8 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback, V
         recorder.setMaxDuration(50000); // 50 seconds
         recorder.setMaxFileSize(5000000); // Approximately 5 megabytes
         recorder.setPreviewDisplay(surfaceHolder.getSurface());
+        recorder.setOrientationHint(90);
+      //  setCameraDisplayOrientation(getActivity(),0,camera);
 
     }
 
@@ -166,11 +168,40 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback, V
                 Fragment fragment = new CameraFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment, fragment).addToBackStack(TAG);
+                fragmentTransaction.replace(R.id.fragment, fragment);
                 fragmentTransaction.commit();
                 break;
 
         }
 
     }
+
+   /* public static void setCameraDisplayOrientation(Activity activity,
+                                                   int cameraId, android.hardware.Camera camera) {
+
+        android.hardware.Camera.CameraInfo info =
+                new android.hardware.Camera.CameraInfo();
+
+        android.hardware.Camera.getCameraInfo(cameraId, info);
+
+        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+        int degrees = 0;
+
+        switch (rotation) {
+            case Surface.ROTATION_0: degrees = 0; break;
+            case Surface.ROTATION_90: degrees = 90; break;
+            case Surface.ROTATION_180: degrees = 180; break;
+            case Surface.ROTATION_270: degrees = 270; break;
+        }
+
+        int result;
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation + degrees) % 360;
+            result = (360 - result) % 360;  // compensate the mirror
+        } else {  // back-facing
+            result = (info.orientation - degrees + 360) % 360;
+        }
+        VideoFragment.orientation=result;
+        camera.setDisplayOrientation(result);
+    }*/
 }
