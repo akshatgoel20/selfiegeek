@@ -6,22 +6,21 @@
 
     <!-- TODO: Update blank fragment layout -->
     <SurfaceView
-        android:id="@+id/surfaceview"
+        android:id="@+id/surfaceview_video"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <Button
-        android:id="@+id/modeselect"
-        android:text="Video"
+        android:id="@+id/modeselect_video"
+        android:text="Camera"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <Button
-        android:id="@+id/capture_button"
-        android:text="Capture"
+        android:id="@+id/capture_button_video"
+        android:text="Record"
         android:layout_gravity="center_horizontal|bottom"
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

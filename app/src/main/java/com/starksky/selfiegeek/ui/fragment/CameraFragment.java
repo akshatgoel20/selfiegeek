@@ -4,7 +4,10 @@ import android.content.Context;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -15,6 +18,7 @@ import android.widget.Toast;
 
 import com.starksky.selfiegeek.R;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,18 +31,22 @@ import java.io.IOException;
  * Use the {@link CameraFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
+public class CameraFragment extends Fragment implements SurfaceHolder.Callback, View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String TAG = CameraFragment.class.getSimpleName();
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    android.hardware.Camera camera ;
-    SurfaceView surfaceView ;
-    SurfaceHolder surfaceHolder ;
-    Camera.PictureCallback jpegCallback ;
-    Camera.PictureCallback rawCallback ;
-    Camera.ShutterCallback shutterCallback ;
-    Button captureButton ;
+    android.hardware.Camera camera;
+    SurfaceView surfaceView;
+    SurfaceHolder surfaceHolder;
+    Camera.PictureCallback jpegCallback;
+    Camera.PictureCallback rawCallback;
+    Camera.ShutterCallback shutterCallback;
+    Button captureButton;
+    Button modeSelect;
+
+
 
 
     // TODO: Rename and change types of parameters
@@ -72,9 +80,11 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+
 
         }
     }
@@ -83,8 +93,8 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_camera,container,false);
-        surfaceView = (SurfaceView)rootView.findViewById(R.id.surfaceview);
+        View rootView = inflater.inflate(R.layout.fragment_camera, container, false);
+        surfaceView = (SurfaceView) rootView.findViewById(R.id.surfaceview);
         surfaceHolder = surfaceView.getHolder();
         surfaceHolder.addCallback(this);
         jpegCallback = new Camera.PictureCallback() {
@@ -92,33 +102,31 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
             public void onPictureTaken(byte[] data, Camera camera) {
                 FileOutputStream outStream = null;
 
-                    try {
-                        outStream = new FileOutputStream(String.format("/sdcard/%d.jpg", System.currentTimeMillis()));
-                        outStream.write(data);
-                        outStream.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }finally {
-                        Toast.makeText(getContext(), "Picture Saved", Toast.LENGTH_SHORT).show();
-                        refreshCamera();
-                    }
-                }
-        };
-
-        captureButton = (Button)rootView.findViewById(R.id.capture_button);
-        captureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
                 try {
-                    captureImage(view);
+                    File direct = new File(Environment.getExternalStorageDirectory() + "/selfiegeek");
+                    if (!direct.exists()) {
+                        File sgdir = new File("/sdcard/selfiegeek/");
+                        sgdir.mkdirs();
+                    }
+                    outStream = new FileOutputStream(String.format("/sdcard/selfiegeek/%d.jpg", System.currentTimeMillis()));
+                    outStream.write(data);
+                    outStream.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
+                } finally {
+                    Toast.makeText(getContext(), "Picture Saved", Toast.LENGTH_SHORT).show();
+                    refreshCamera();
                 }
             }
-        });
-        return rootView ;
+        };
+        modeSelect = (Button) rootView.findViewById(R.id.modeselect);
+        modeSelect.setOnClickListener(this);
+        captureButton = (Button) rootView.findViewById(R.id.capture_button);
+        captureButton.setOnClickListener(this);
+        return rootView;
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -127,6 +135,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
             mListener.onFragmentInteraction(uri);
         }
     }
+
 
     @Override
     public void onAttach(Context context) {
@@ -148,7 +157,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         camera = android.hardware.Camera.open();
-        Camera.Parameters param ;
+        Camera.Parameters param;
         camera.setDisplayOrientation(90);
         param = camera.getParameters();
         param.setPreviewSize(352, 288);
@@ -169,16 +178,16 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
 
     }
 
-    public void   refreshCamera(){
-        if(surfaceHolder.getSurface() == null){
+    public void refreshCamera() {
+        if (surfaceHolder.getSurface() == null) {
             return;
         }
-        try{
+        try {
             camera.stopPreview();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        try{
+        try {
             camera.setPreviewDisplay(surfaceHolder);
             camera.startPreview();
         } catch (IOException e) {
@@ -186,8 +195,9 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
         }
     }
 
-    public void captureImage(View v) throws IOException{
-        camera.takePicture(null,null,jpegCallback);
+    public void captureImage(View v) throws IOException {
+        camera.takePicture(null, null, jpegCallback);
+
     }
 
     @Override
@@ -198,6 +208,29 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
 
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.capture_button:
+
+                try {
+                    captureImage(view);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                break;
+            case R.id.modeselect:
+                Fragment fragment = new VideoFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment, fragment).addToBackStack(TAG);
+                fragmentTransaction.commit();
+                break;
+        }
+
+    }
 
 
     /**
