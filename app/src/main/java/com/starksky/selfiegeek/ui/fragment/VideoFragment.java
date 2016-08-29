@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.starksky.selfiegeek.R;
+import com.starksky.selfiegeek.network.Upload;
 
 import java.io.File;
 import java.io.IOException;
@@ -78,7 +79,6 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback, V
         prepareRecorder();
 
 
-
         try {
             camera.setPreviewDisplay(surfaceHolder);
             camera.startPreview();
@@ -119,6 +119,7 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback, V
         try {
             String fileName = String.format("/sdcard/selfiegeek/%d.mp4", System.currentTimeMillis());
             recorder.setOutputFile(fileName);
+            new Upload().uploadcontent(new File(fileName));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -126,7 +127,7 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback, V
         recorder.setMaxFileSize(5000000); // Approximately 5 megabytes
         recorder.setPreviewDisplay(surfaceHolder.getSurface());
         recorder.setOrientationHint(90);
-      //  setCameraDisplayOrientation(getActivity(),0,camera);
+        //  setCameraDisplayOrientation(getActivity(),0,camera);
 
     }
 

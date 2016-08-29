@@ -9,22 +9,26 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-import com.kinvey.android.Client;
 import com.kinvey.android.callback.KinveyPingCallback;
+import com.kinvey.android.callback.KinveyUserCallback;
+import com.kinvey.java.User;
 import com.starksky.selfiegeek.R;
+import com.starksky.selfiegeek.app.MyApplication;
 import com.starksky.selfiegeek.ui.fragment.CameraFragment;
+import com.starksky.selfiegeek.utils.FetchPhoto;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
-    private GLSurfaceView vsv ;
+    private GLSurfaceView vsv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        new FetchPhoto();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -42,21 +46,31 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        final Client mKinveyClient = new Client.Builder("kid_HJGQ3Nhc", "fe7c9c680cb04963a91b574ad5e4e550"
-                , this).build();
-    mKinveyClient.ping(new KinveyPingCallback() {
-        @Override
-        public void onSuccess(Boolean aBoolean) {
-            Log.d("status","success");
+        MyApplication.getInstance().getClient().ping(new KinveyPingCallback() {
+            @Override
+            public void onSuccess(Boolean aBoolean) {
+                Log.d("status", "success");
 
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                Log.d("status", "fail: " + throwable.toString());
+            }
+        });
+        if (!MyApplication.getInstance().getClient().user().isUserLoggedIn()) {
+            MyApplication.getInstance().getClient().user().login(new KinveyUserCallback() {
+                @Override
+                public void onSuccess(User user) {
+                    Log.i(TAG, "Logged in a new implicit user with id: " + user.getId());
+                }
+
+                @Override
+                public void onFailure(Throwable throwable) {
+                    Log.e(TAG, "Login Failure", throwable);
+                }
+            });
         }
-
-        @Override
-        public void onFailure(Throwable throwable) {
-            Log.d("status","fail: "+throwable.toString());
-        }
-    });
-
     }
 
     @Override

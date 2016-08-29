@@ -31,7 +31,7 @@ public class MainActivityFragment extends Fragment {
     }
 
     private void loadContent(){
-    imageRecyclerView.setLayoutManager( new GridLayoutManager(imageRecyclerView.getContext(),3));
+    imageRecyclerView.setLayoutManager( new GridLayoutManager(imageRecyclerView.getContext(),4));
         imageRecyclerView.setAdapter(new GridImagesAdapter());
     }
 }

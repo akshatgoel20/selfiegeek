@@ -2,7 +2,9 @@ package com.starksky.selfiegeek.adapter;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.starksky.selfiegeek.R;
+import com.starksky.selfiegeek.model.ImageList;
 
 import java.io.File;
 
@@ -18,8 +21,8 @@ import java.io.File;
  */
 public class GridImagesAdapter extends RecyclerView.Adapter<GridImagesAdapter.ViewHolder> {
 
-    File file = new File(Environment.getExternalStorageDirectory()+"/selfiegeek/");
-    File imageList[] = file.listFiles();
+File imageList[] = ImageList.getImageList();
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -29,7 +32,15 @@ public class GridImagesAdapter extends RecyclerView.Adapter<GridImagesAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Bitmap b = BitmapFactory.decodeFile(imageList[position].getAbsolutePath());
+        Bitmap b ;
+        if(isVideo(imageList[position].toString())){
+            b = ThumbnailUtils.createVideoThumbnail(imageList[position].getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND);
+        }else {
+          //   b = BitmapFactory.decodeFile(imageList[position].getAbsolutePath());
+            final int THUMBSIZE = 128;
+            b= ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(imageList[position].getAbsolutePath()),THUMBSIZE, THUMBSIZE);
+
+        }
         holder.image.setImageBitmap(b);
     }
 
@@ -46,5 +57,12 @@ public class GridImagesAdapter extends RecyclerView.Adapter<GridImagesAdapter.Vi
             super(view);
             image = (ImageView) view.findViewById(R.id.image_grid_view);
         }
+    }
+
+    boolean isVideo(String str){
+        if(str.contains(".mp4")){
+            return true;
+        }
+        return false;
     }
 }

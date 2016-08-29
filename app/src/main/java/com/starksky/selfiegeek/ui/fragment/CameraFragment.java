@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.starksky.selfiegeek.R;
+import com.starksky.selfiegeek.network.Upload;
+import com.starksky.selfiegeek.utils.FetchPhoto;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -108,9 +110,12 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
                         File sgdir = new File("/sdcard/selfiegeek/");
                         sgdir.mkdirs();
                     }
-                    outStream = new FileOutputStream(String.format("/sdcard/selfiegeek/%d.jpg", System.currentTimeMillis()));
+                    String str = String.format("/sdcard/selfiegeek/%d.jpg", System.currentTimeMillis());
+                    outStream = new FileOutputStream(str);
                     outStream.write(data);
                     outStream.close();
+                    new FetchPhoto();
+                    new Upload().uploadcontent(new File(str));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -126,6 +131,10 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
         captureButton = (Button) rootView.findViewById(R.id.capture_button);
         captureButton.setOnClickListener(this);
         return rootView;
+
+    }
+
+    void uploadFiletoCloud(){
 
     }
 
