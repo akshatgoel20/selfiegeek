@@ -5,6 +5,7 @@ import android.util.Log;
 import com.kinvey.java.core.MediaHttpUploader;
 import com.kinvey.java.core.UploaderProgressListener;
 import com.kinvey.java.model.FileMetaData;
+import com.kinvey.java.model.KinveyMetaData;
 import com.starksky.selfiegeek.app.MyApplication;
 
 import java.io.File;
@@ -19,6 +20,8 @@ public class Upload {
     public void uploadcontent(File image) {
         //   File file[] = ImageList.getImageList();
         //   File image = file[ImageList.getImageList().length-1];
+        FileMetaData metadata = new FileMetaData("myFileID");  //create the FileMetaData object
+        metadata.setFileName(image.getName());
         MyApplication.getInstance().getClient().file().upload(image, new UploaderProgressListener() {
             @Override
             public void progressChanged(MediaHttpUploader uploader) throws IOException {

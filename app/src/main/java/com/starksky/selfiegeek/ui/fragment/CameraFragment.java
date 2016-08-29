@@ -79,6 +79,9 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
         return fragment;
     }
 
+    // TODO: 2016-08-29
+    //snif rotation
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
