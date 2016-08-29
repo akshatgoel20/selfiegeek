@@ -6,6 +6,7 @@ import android.util.Log;
 import com.kinvey.android.AsyncAppData;
 import com.kinvey.android.callback.KinveyListCallback;
 import com.starksky.selfiegeek.app.MyApplication;
+import com.starksky.selfiegeek.model.Entity;
 import com.starksky.selfiegeek.model.EventEntity;
 import com.starksky.selfiegeek.model.ImageList;
 
@@ -23,7 +24,7 @@ public class FetchPhoto {
       /*  File file = new File(Environment.getExternalStorageDirectory()+"/selfiegeek/");
         File imageList[] = file.listFiles();*/
         // ImageList.setImageList(imageList);
-        AsyncAppData<EventEntity> myevents = MyApplication.getInstance().getClient().appData("events", EventEntity.class);
+        /*AsyncAppData<EventEntity> myevents = MyApplication.getInstance().getClient().appData("myFileID", EventEntity.class);
             myevents.get(new KinveyListCallback<EventEntity>() {
             @Override
             public void onSuccess(EventEntity[] result) {
@@ -33,6 +34,19 @@ public class FetchPhoto {
             @Override
             public void onFailure(Throwable error) {
                 Log.d(TAG, "failed to fetch all", error);
+            }
+        });*/
+
+        MyApplication.getInstance().getClient().appData("_files", EventEntity.class).get(new KinveyListCallback<EventEntity>() {
+            @Override
+            public void onSuccess(EventEntity[] result) {
+                Log.d(TAG, "received " + result.length + " events");
+            }
+
+            @Override
+            public void onFailure(Throwable error) {
+                Log.d(TAG, "failed to fetch all", error);
+
             }
         });
     }

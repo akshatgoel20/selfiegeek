@@ -12,12 +12,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.kinvey.android.callback.KinveyPingCallback;
 import com.kinvey.android.callback.KinveyUserCallback;
 import com.kinvey.java.User;
 import com.starksky.selfiegeek.R;
 import com.starksky.selfiegeek.app.MyApplication;
+import com.starksky.selfiegeek.network.Save;
 import com.starksky.selfiegeek.ui.fragment.CameraFragment;
 import com.starksky.selfiegeek.utils.FetchPhoto;
 
@@ -32,6 +34,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Button btnFetch = (Button)findViewById(R.id.fetch_image);
+        btnFetch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new FetchPhoto();
+            }
+        });
+
+        Button btnSave = (Button)findViewById(R.id.save);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new Save().onSaveClick();
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -70,8 +88,10 @@ public class MainActivity extends AppCompatActivity {
                     Log.e(TAG, "Login Failure", throwable);
                 }
             });
+            MyApplication.getInstance().getClient().enableDebugLogging();
         }
-        new FetchPhoto();
+
+
     }
 
     @Override
