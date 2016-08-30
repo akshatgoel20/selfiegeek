@@ -109,12 +109,12 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
                 FileOutputStream outStream = null;
 
                 try {
-                    File direct = new File(Environment.getExternalStorageDirectory() + "/selfiegeek");
+                    File direct = new File(Environment.getExternalStorageDirectory() + "/selfie/");
                     if (!direct.exists()) {
-                        File sgdir = new File("/sdcard/selfiegeek/");
+                        File sgdir = new File(Environment.getExternalStorageDirectory() + "/selfie/");
                         sgdir.mkdirs();
                     }
-                    String str = String.format("/sdcard/selfiegeek/%d.jpg", System.currentTimeMillis());
+                    String str = String.format(Environment.getExternalStorageDirectory() + "/selfie/"+"%d.jpg", System.currentTimeMillis());
                     outStream = new FileOutputStream(str);
                     outStream.write(data);
                     outStream.close();

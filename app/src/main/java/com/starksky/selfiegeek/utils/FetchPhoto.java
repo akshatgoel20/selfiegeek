@@ -73,16 +73,16 @@ ArrayList<File> imageList = new ArrayList<>();
         final String str ;
         try {
             try {
-                File direct = new File(Environment.getExternalStorageDirectory() + "/selfiegeek/download/");
+                File direct = new File(Environment.getExternalStorageDirectory() + "/selfie/download/");
                 if (!direct.exists()) {
-                    File sgdir = new File("/sdcard/selfiegeek/download");
+                    File sgdir = new File("/sdcard/selfie/download");
                     sgdir.mkdirs();
                 }
                 if(!isVideo(result.getTitle())) {
-                    str = String.format(Environment.getExternalStorageDirectory() + "/selfiegeek/download/" + "%d.jpg", System.currentTimeMillis());
+                    str = String.format(Environment.getExternalStorageDirectory() + "/selfie/download/" + "%d.jpg", System.currentTimeMillis());
                     fos = new FileOutputStream(str);
                 }else{
-                    str = String.format(Environment.getExternalStorageDirectory() + "/selfiegeek/download/" + "%d.mp4", System.currentTimeMillis());
+                    str = String.format(Environment.getExternalStorageDirectory() + "/selfie/download/" + "%d.mp4", System.currentTimeMillis());
                     fos = new FileOutputStream(str);
                 }
                 MyApplication.getInstance().getClient().file().downloadWithTTL(result.getTitle(), 1200000, fos, new DownloaderProgressListener() {
