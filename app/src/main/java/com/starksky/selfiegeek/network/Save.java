@@ -17,7 +17,7 @@ public class Save {
     public void onSaveClick(String str) {
         Entity entity = new Entity(str);
         entity.put("Description","image");
-        MyApplication.getInstance().getClient().appData("entityCollection", Entity.class).save(entity, new KinveyClientCallback<Entity>() {
+        MyApplication.getInstance().getClient().appData("entityCollectionone", Entity.class).save(entity, new KinveyClientCallback<Entity>() {
             @Override
             public void onSuccess(Entity result) {
                 Log.i(TAG, "upload progress: " + result.getTitle());

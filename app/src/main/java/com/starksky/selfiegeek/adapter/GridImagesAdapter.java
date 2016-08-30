@@ -15,13 +15,19 @@ import com.starksky.selfiegeek.R;
 import com.starksky.selfiegeek.model.ImageList;
 
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by NTQK0716 on 2016-08-26.
  */
 public class GridImagesAdapter extends RecyclerView.Adapter<GridImagesAdapter.ViewHolder> {
 
-File imageList[] = ImageList.getImageList();
+ArrayList<File> imageList = ImageList.getImageList();
+public void updateAd(){
+    imageList = ImageList.getImageList();
+    notifyDataSetChanged();
+}
+
 
 
     @Override
@@ -33,12 +39,12 @@ File imageList[] = ImageList.getImageList();
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Bitmap b ;
-        if(isVideo(imageList[position].toString())){
-            b = ThumbnailUtils.createVideoThumbnail(imageList[position].getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND);
+        if(isVideo(imageList.get(position).toString())){
+            b = ThumbnailUtils.createVideoThumbnail(imageList.get(position).getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND);
         }else {
           //   b = BitmapFactory.decodeFile(imageList[position].getAbsolutePath());
             final int THUMBSIZE = 128;
-            b= ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(imageList[position].getAbsolutePath()),THUMBSIZE, THUMBSIZE);
+            b= ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(imageList.get(position).getAbsolutePath()),THUMBSIZE, THUMBSIZE);
 
         }
         holder.image.setImageBitmap(b);
@@ -47,7 +53,7 @@ File imageList[] = ImageList.getImageList();
     @Override
     public int getItemCount() {
 
-        return imageList.length;
+        return imageList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

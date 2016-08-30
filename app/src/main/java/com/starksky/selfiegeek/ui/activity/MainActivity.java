@@ -19,13 +19,16 @@ import com.kinvey.android.callback.KinveyUserCallback;
 import com.kinvey.java.User;
 import com.starksky.selfiegeek.R;
 import com.starksky.selfiegeek.app.MyApplication;
+import com.starksky.selfiegeek.framework.iface.ResponseListener;
 import com.starksky.selfiegeek.network.Save;
 import com.starksky.selfiegeek.ui.fragment.CameraFragment;
+import com.starksky.selfiegeek.ui.fragment.MainActivityFragment;
 import com.starksky.selfiegeek.utils.FetchPhoto;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private GLSurfaceView vsv;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,21 +38,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Button btnFetch = (Button)findViewById(R.id.fetch_image);
-        btnFetch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new FetchPhoto();
-            }
-        });
 
-        Button btnSave = (Button)findViewById(R.id.save);
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-              //  new Save().onSaveClick();
-            }
-        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+
     }
 
     @Override
@@ -115,4 +105,6 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }

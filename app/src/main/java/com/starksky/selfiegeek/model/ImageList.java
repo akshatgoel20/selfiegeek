@@ -9,13 +9,14 @@ import java.util.ArrayList;
  */
 public class ImageList {
 
-    public static File[] getImageList() {
+
+    public static ArrayList<File> getImageList() {
         return imageList;
     }
 
-    public static void setImageList(File[] imageList) {
+    public static void setImageList(ArrayList<File> imageList) {
         ImageList.imageList = imageList;
     }
 
-    static File imageList[] ;
+    static ArrayList<File> imageList = new ArrayList<>();
 }

@@ -28,7 +28,7 @@ import java.io.IOException;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link CameraFragment.OnFragmentInteractionListener} interface
+ * {@link CameraFragment.OnFragmentInteractionListener} iface
  * to handle interaction events.
  * Use the {@link CameraFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -117,7 +117,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
                     outStream = new FileOutputStream(str);
                     outStream.write(data);
                     outStream.close();
-                    new FetchPhoto();
+                  //  new FetchPhoto();
                     new Upload().uploadcontent(new File(str));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -246,7 +246,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
 
 
     /**
-     * This interface must be implemented by activities that contain this
+     * This iface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
