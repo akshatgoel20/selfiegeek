@@ -208,8 +208,8 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
     }
 
     public void captureImage(View v) throws IOException {
-        camera.takePicture(null, null, jpegCallback);
 
+        camera.takePicture(null, null, jpegCallback);
     }
 
     @Override
