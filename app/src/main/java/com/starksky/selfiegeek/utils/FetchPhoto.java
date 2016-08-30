@@ -3,7 +3,10 @@ package com.starksky.selfiegeek.utils;
 import android.os.Environment;
 import android.util.Log;
 
+import com.kinvey.android.AsyncAppData;
 import com.kinvey.android.callback.KinveyListCallback;
+import com.kinvey.java.cache.CachePolicy;
+import com.kinvey.java.cache.InMemoryLRUCache;
 import com.kinvey.java.core.DownloaderProgressListener;
 import com.kinvey.java.core.MediaHttpDownloader;
 import com.starksky.selfiegeek.app.MyApplication;
@@ -43,9 +46,10 @@ ArrayList<File> imageList = new ArrayList<>();
                 Log.d(TAG, "failed to fetch all", error);
             }
         });*/
+        AsyncAppData<Entity> myevents = MyApplication.getInstance().getClient().appData(MyApplication.getInstance().getClient().user().getId(), Entity.class);
 
-        MyApplication.getInstance().getClient().appData(MyApplication.getInstance().getClient().user().getId(),
-                Entity.class).get(new KinveyListCallback<Entity>() {
+                myevents.setCache(new InMemoryLRUCache(), CachePolicy.CACHEFIRST);
+                myevents.get(new KinveyListCallback<Entity>() {
             @Override
             public void onSuccess(Entity[] result) {
                 for(int i =0 ;i<result.length;i++) {

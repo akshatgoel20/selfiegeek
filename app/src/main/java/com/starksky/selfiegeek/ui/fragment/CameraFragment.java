@@ -138,9 +138,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
 
     }
 
-    void uploadFiletoCloud(){
 
-    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

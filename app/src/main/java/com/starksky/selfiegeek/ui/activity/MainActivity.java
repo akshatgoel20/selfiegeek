@@ -12,12 +12,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
 import com.kinvey.android.callback.KinveyPingCallback;
 import com.kinvey.android.callback.KinveyUserCallback;
 import com.kinvey.java.User;
 import com.starksky.selfiegeek.R;
 import com.starksky.selfiegeek.app.MyApplication;
 import com.starksky.selfiegeek.ui.fragment.CameraFragment;
+import com.starksky.selfiegeek.utils.PerformChecks;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -27,7 +30,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+       if(!PerformChecks.isNetworkAvailable()) {
+           PerformChecks.showToast("Please connect to internet", Toast.LENGTH_SHORT);
+           return;
+       }
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -76,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
+  /*  @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -96,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
 
 }

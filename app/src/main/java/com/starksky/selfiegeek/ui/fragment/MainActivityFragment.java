@@ -7,6 +7,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -52,13 +55,31 @@ public class MainActivityFragment extends Fragment implements ResponseListener {
             }
         }));
         loadContent();
+        setHasOptionsMenu(true);
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.menu_main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_refresh) {
+            loadContent();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void loadContent() {
         new FetchPhoto(this);
 
-            emptyText.setVisibility(View.GONE);
+
             imageRecyclerView.setLayoutManager(new GridLayoutManager(imageRecyclerView.getContext(), 4));
             imageRecyclerView.setAdapter(gridImagesAdapter);
 
@@ -68,6 +89,7 @@ public class MainActivityFragment extends Fragment implements ResponseListener {
     @Override
     public void updateAdapter() {
         gridImagesAdapter.updateAd();
+       emptyText.setVisibility(View.GONE);
         //    imageRecyclerView.setAdapter(gridImagesAdapter);
     }
 }
