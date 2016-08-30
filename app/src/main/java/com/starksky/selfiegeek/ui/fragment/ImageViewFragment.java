@@ -19,6 +19,7 @@ import com.starksky.selfiegeek.model.ImageList;
 public class ImageViewFragment extends Fragment {
     ImageView imageView;
     int position ;
+    String type ;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,10 +33,16 @@ public class ImageViewFragment extends Fragment {
         if(getArguments()!= null){
             position = getArguments().getInt("pos");
         }
-        View rootView = inflater.inflate(R.layout.fragment_view_image, container, false);
-        imageView = (ImageView) rootView.findViewById(R.id.view_image);
-        Bitmap bitmap1 = BitmapFactory.decodeFile(ImageList.getImageList().get(position).getAbsolutePath());
-        imageView.setImageBitmap(bitmap1);
-        return rootView;
+        String absPath = ImageList.getImageList().get(position).getAbsolutePath();
+        if(absPath.contains(".jpg")) {
+            View rootView = inflater.inflate(R.layout.fragment_view_image, container, false);
+            imageView = (ImageView) rootView.findViewById(R.id.view_image);
+            Bitmap bitmap1 = BitmapFactory.decodeFile(absPath);
+            imageView.setImageBitmap(bitmap1);
+            return rootView;
+        }else{
+            View rootView = inflater.inflate(R.layout.fragment_view_image, container, false);
+            return rootView ;
+        }
     }
 }
