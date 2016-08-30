@@ -10,8 +10,16 @@
     tools:context=".ui.fragment.MainActivityFragment"
     tools:showIn="@layout/activity_main">
 
+    <TextView
+        android:id="@+id/textview_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to Selfie Geek, Go ahead to shoot your first selfie"
+        android:layout_centerHorizontal="true"/>
+
 <android.support.v7.widget.RecyclerView
     android:id="@+id/gridViewImages"
+
     android:layout_width="wrap_content"
     android:numColumns="auto_fit"
     android:layout_height="wrap_content">

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.starksky.selfiegeek.R;
 import com.starksky.selfiegeek.adapter.GridImagesAdapter;
@@ -24,6 +25,8 @@ public class MainActivityFragment extends Fragment implements ResponseListener {
     private static final String TAG = MainActivityFragment.class.getSimpleName();
     RecyclerView imageRecyclerView;
     GridImagesAdapter gridImagesAdapter;
+    TextView emptyText ;
+
 
     public MainActivityFragment() {
     }
@@ -33,6 +36,7 @@ public class MainActivityFragment extends Fragment implements ResponseListener {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         imageRecyclerView = (RecyclerView) rootView.findViewById(R.id.gridViewImages);
+        emptyText = (TextView)rootView.findViewById(R.id.textview_fragment);
         gridImagesAdapter = new GridImagesAdapter();
         imageRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -53,12 +57,12 @@ public class MainActivityFragment extends Fragment implements ResponseListener {
 
     private void loadContent() {
         new FetchPhoto(this);
-        if (ImageList.getImageList() != null) {
+
+            emptyText.setVisibility(View.GONE);
             imageRecyclerView.setLayoutManager(new GridLayoutManager(imageRecyclerView.getContext(), 4));
             imageRecyclerView.setAdapter(gridImagesAdapter);
-        } else {
 
-        }
+
     }
 
     @Override

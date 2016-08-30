@@ -36,6 +36,7 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback, V
     Button captureButton;
     Button modeSelect;
     public static int orientation;
+    String fileName ;
 
 
     public VideoFragment() {
@@ -108,7 +109,7 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback, V
         recorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
 
         CamcorderProfile cpHigh = CamcorderProfile
-                .get(CamcorderProfile.QUALITY_HIGH);
+                .get(CamcorderProfile.QUALITY_LOW);
         recorder.setProfile(cpHigh);
         File direct = new File(Environment.getExternalStorageDirectory() + "/selfiegeek");
         if (!direct.exists()) {
@@ -117,9 +118,9 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback, V
         }
 
         try {
-            String fileName = String.format("/sdcard/selfiegeek/%d.mp4", System.currentTimeMillis());
+             fileName = String.format("/sdcard/selfiegeek/%d.mp4", System.currentTimeMillis());
             recorder.setOutputFile(fileName);
-            new Upload().uploadcontent(new File(fileName));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -130,6 +131,8 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback, V
         //  setCameraDisplayOrientation(getActivity(),0,camera);
 
     }
+
+
 
     private void prepareRecorder() {
 
@@ -153,19 +156,21 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback, V
                     recorder.stop();
                     recording = false;
                     captureButton.setText("Record");
+                    new Upload().uploadcontent(new File(fileName));
 
                     // Let's initRecorder so we can record again
                     initRecorder();
                     prepareRecorder();
                 } else {
                     camera.release();
-                    captureButton.setText("Recording");
+                    captureButton.setText("Stop");
                     recording = true;
                     recorder.start();
 
                 }
                 break;
             case R.id.modeselect_video:
+                camera.release();
                 Fragment fragment = new CameraFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -177,7 +182,13 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback, V
 
     }
 
-   /* public static void setCameraDisplayOrientation(Activity activity,
+    @Override
+    public void onStop() {
+        super.onStop();
+        camera.release();
+    }
+
+/* public static void setCameraDisplayOrientation(Activity activity,
                                                    int cameraId, android.hardware.Camera camera) {
 
         android.hardware.Camera.CameraInfo info =

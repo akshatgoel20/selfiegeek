@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.kinvey.java.core.KinveyClientCallback;
 import com.starksky.selfiegeek.app.MyApplication;
+import com.starksky.selfiegeek.framework.iface.ResponseListener;
 import com.starksky.selfiegeek.model.Entity;
 
 /**
@@ -12,14 +13,18 @@ import com.starksky.selfiegeek.model.Entity;
  */
 public class Save {
 
+ResponseListener responseListener ;
+
     private static final String TAG = Save.class.getSimpleName();
 
-    public void onSaveClick(String str) {
+    public void onSaveClick(String str, String type) {
         Entity entity = new Entity(str);
-        entity.put("Description","image");
-        MyApplication.getInstance().getClient().appData("entityCollectionone", Entity.class).save(entity, new KinveyClientCallback<Entity>() {
+        entity.put("Description",type);
+        MyApplication.getInstance().getClient().appData(MyApplication.getInstance().getClient().user().getId(),
+                Entity.class).save(entity, new KinveyClientCallback<Entity>() {
             @Override
             public void onSuccess(Entity result) {
+               // responseListener.updateAdapter();
                 Log.i(TAG, "upload progress: " + result.getTitle());
             }
 

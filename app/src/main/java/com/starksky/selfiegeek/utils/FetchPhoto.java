@@ -44,7 +44,8 @@ ArrayList<File> imageList = new ArrayList<>();
             }
         });*/
 
-        MyApplication.getInstance().getClient().appData("entityCollectionone", Entity.class).get(new KinveyListCallback<Entity>() {
+        MyApplication.getInstance().getClient().appData(MyApplication.getInstance().getClient().user().getId(),
+                Entity.class).get(new KinveyListCallback<Entity>() {
             @Override
             public void onSuccess(Entity[] result) {
                 for(int i =0 ;i<result.length;i++) {
@@ -73,8 +74,13 @@ ArrayList<File> imageList = new ArrayList<>();
                     File sgdir = new File("/sdcard/selfiegeek/download");
                     sgdir.mkdirs();
                 }
-                 str = String.format(Environment.getExternalStorageDirectory() + "/selfiegeek/download/"+"%d.jpg", System.currentTimeMillis());
-                fos = new FileOutputStream(str);
+                if(!isVideo(result.getTitle())) {
+                    str = String.format(Environment.getExternalStorageDirectory() + "/selfiegeek/download/" + "%d.jpg", System.currentTimeMillis());
+                    fos = new FileOutputStream(str);
+                }else{
+                    str = String.format(Environment.getExternalStorageDirectory() + "/selfiegeek/download/" + "%d.mp4", System.currentTimeMillis());
+                    fos = new FileOutputStream(str);
+                }
                 MyApplication.getInstance().getClient().file().downloadWithTTL(result.getTitle(), 1200000, fos, new DownloaderProgressListener() {
                     @Override
                     public void progressChanged(MediaHttpDownloader mediaHttpDownloader) throws IOException {
@@ -103,6 +109,13 @@ ArrayList<File> imageList = new ArrayList<>();
             }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    boolean isVideo(String str){
+        if(str.contains(".jpg")){
+            return  false;
+        }
+        return  true ;
     }
 }
 

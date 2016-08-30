@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.MediaController;
+import android.widget.VideoView;
 
 import com.starksky.selfiegeek.R;
 import com.starksky.selfiegeek.model.ImageList;
@@ -20,6 +22,7 @@ public class ImageViewFragment extends Fragment {
     ImageView imageView;
     int position ;
     String type ;
+    VideoView videoView ;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,7 +44,12 @@ public class ImageViewFragment extends Fragment {
             imageView.setImageBitmap(bitmap1);
             return rootView;
         }else{
-            View rootView = inflater.inflate(R.layout.fragment_view_image, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_view_video, container, false);
+            videoView = (VideoView)rootView.findViewById(R.id.video_view);
+            videoView.setVideoPath(absPath);
+            videoView.setMediaController(new MediaController(getActivity()));
+            videoView.requestFocus();
+            videoView.start();
             return rootView ;
         }
     }

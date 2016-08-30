@@ -30,7 +30,11 @@ public class Upload {
             @Override
             public void onSuccess(FileMetaData fileMetaData) {
                 Log.i(TAG, "successfully upload file");
-                new Save().onSaveClick(image.getName());
+                if(image.getName().contains(".jpg")) {
+                    new Save().onSaveClick(image.getName(), "image");
+                }else if(image.getName().contains(".mp4")){
+                    new Save().onSaveClick(image.getName(), "video");
+                }
             }
 
             @Override

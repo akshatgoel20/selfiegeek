@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.starksky.selfiegeek.R;
 import com.starksky.selfiegeek.network.Upload;
+import com.starksky.selfiegeek.ui.activity.MainActivity;
 import com.starksky.selfiegeek.utils.FetchPhoto;
 
 import java.io.File;
@@ -237,7 +238,8 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback, 
                 Fragment fragment = new VideoFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment, fragment).addToBackStack(TAG);
+                fragmentTransaction.replace(R.id.fragment, fragment).addToBackStack(MainActivity.class.getName());
+                fragmentManager.popBackStack();
                 fragmentTransaction.commit();
                 break;
         }
