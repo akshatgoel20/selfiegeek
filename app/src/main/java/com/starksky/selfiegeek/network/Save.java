@@ -14,9 +14,9 @@ public class Save {
 
     private static final String TAG = Save.class.getSimpleName();
 
-    public void onSaveClick() {
-        Entity entity = new Entity("myEntity");
-        entity.put("Description","This is a description of a dynamically-added Entity property.");
+    public void onSaveClick(String str) {
+        Entity entity = new Entity(str);
+        entity.put("Description","image");
         MyApplication.getInstance().getClient().appData("entityCollection", Entity.class).save(entity, new KinveyClientCallback<Entity>() {
             @Override
             public void onSuccess(Entity result) {

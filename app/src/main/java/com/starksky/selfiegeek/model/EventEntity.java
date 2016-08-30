@@ -9,11 +9,11 @@ import com.kinvey.java.model.KinveyMetaData;
  */
 public class EventEntity extends GenericJson {
 
-    /*@Key("Download Link")
-    private String downloadLink;*/
+    @Key("Download Link")
+    private String downloadLink;
     @Key("_id")
     private String _id;
-    /*@Key("_kmd")
+    @Key("_kmd")
     private KinveyMetaData meta; // Kinvey metadata, OPTIONAL
     @Key("_acl")
     private KinveyMetaData.AccessControlList acl; //Kinvey access control, OPTIONAL
@@ -24,7 +24,7 @@ public class EventEntity extends GenericJson {
     @Key("mimeType")
     private String mimeType;
     @Key("size")
-    private String size;*/
+    private String size;
 
 
     public EventEntity(){}  //GenericJson classes must have a public empty constructor

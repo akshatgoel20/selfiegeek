@@ -1,17 +1,16 @@
 package com.starksky.selfiegeek.utils;
 
-import android.os.Environment;
 import android.util.Log;
 
-import com.kinvey.android.AsyncAppData;
 import com.kinvey.android.callback.KinveyListCallback;
+import com.kinvey.java.core.DownloaderProgressListener;
+import com.kinvey.java.core.MediaHttpDownloader;
 import com.starksky.selfiegeek.app.MyApplication;
 import com.starksky.selfiegeek.model.Entity;
-import com.starksky.selfiegeek.model.EventEntity;
-import com.starksky.selfiegeek.model.ImageList;
 
-import java.io.File;
-import java.util.ArrayList;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Created by akshat on 26/08/16.
@@ -37,9 +36,12 @@ public class FetchPhoto {
             }
         });*/
 
-        MyApplication.getInstance().getClient().appData("_files", EventEntity.class).get(new KinveyListCallback<EventEntity>() {
+        MyApplication.getInstance().getClient().appData("entityCollection", Entity.class).get(new KinveyListCallback<Entity>() {
             @Override
-            public void onSuccess(EventEntity[] result) {
+            public void onSuccess(Entity[] result) {
+                for(int i=0;i<result.length;i++) {
+                    startDownload(result[i]);
+                }
                 Log.d(TAG, "received " + result.length + " events");
             }
 
@@ -50,4 +52,31 @@ public class FetchPhoto {
             }
         });
     }
+
+    void startDownload(Entity result) {
+        FileOutputStream fos = null;
+        try {
+            String str = String.format("/sdcard/selfiegeek/akshat.jpg", System.currentTimeMillis());
+            fos = new FileOutputStream(str);
+            MyApplication.getInstance().getClient().file().downloadWithTTL(result.getTitle(), 1200000, fos, new DownloaderProgressListener() {
+                @Override
+                public void progressChanged(MediaHttpDownloader mediaHttpDownloader) throws IOException {
+
+                }
+
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d(TAG,"One file downloaded");
+                }
+
+                @Override
+                public void onFailure(Throwable throwable) {
+
+                }
+            });
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 }
+
