@@ -1,4 +1,4 @@
-# selfiegeek
+# selfie geek
 
 Selfie Geek
 
